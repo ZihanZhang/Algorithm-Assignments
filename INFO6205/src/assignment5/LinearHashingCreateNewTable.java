@@ -291,7 +291,7 @@ import edu.princeton.cs.algs4.StdOut;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class LinearHashing<Key, Value> {
+public class LinearHashingCreateNewTable<Key, Value> {
     private static final int INIT_CAPACITY = 4;
 
     private int n;           // number of key-value pairs in the symbol table
@@ -304,7 +304,7 @@ public class LinearHashing<Key, Value> {
     /**
      * Initializes an empty symbol table.
      */
-    public LinearHashing() {
+    public LinearHashingCreateNewTable() {
         this(INIT_CAPACITY);
     }
 
@@ -313,14 +313,14 @@ public class LinearHashing<Key, Value> {
      *
      * @param capacity the initial capacity
      */
-    public LinearHashing(int capacity) {
+    public LinearHashingCreateNewTable(int capacity) {
         m = capacity;
         n = 0;
         keys = (Key[])   new Object[m];
         vals = (Value[]) new Object[m];
     }
     
-    public LinearHashing(int capacity, double loadfactor) {
+    public LinearHashingCreateNewTable(int capacity, double loadfactor) {
     	this.loadfactor = loadfactor;
     	m = capacity;
     	n = 0;
@@ -367,7 +367,7 @@ public class LinearHashing<Key, Value> {
 
     // resizes the hash table to the given capacity by re-hashing all of the keys
     private void resize(int capacity) {
-        LinearHashing<Key, Value> temp = new LinearHashing<Key, Value>(capacity);
+        LinearHashingCreateNewTable<Key, Value> temp = new LinearHashingCreateNewTable<Key, Value>(capacity);
         for (int i = 0; i < m; i++) {
             if (keys[i] != null) {
                 temp.put(keys[i], vals[i]);
@@ -510,7 +510,7 @@ public class LinearHashing<Key, Value> {
      * @param args the command-line arguments
      */
     public static void main(String[] args) { 
-        LinearHashing<String, Integer> st = new LinearHashing<String, Integer>();
+        LinearHashingCreateNewTable<String, Integer> st = new LinearHashingCreateNewTable<String, Integer>();
         for (int i = 0; !StdIn.isEmpty(); i++) {
             String key = StdIn.readString();
             st.put(key, i);

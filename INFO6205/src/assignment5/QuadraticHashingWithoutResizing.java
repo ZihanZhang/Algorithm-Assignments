@@ -10,14 +10,12 @@ import edu.princeton.cs.algs4.SeparateChainingHashST;
 import edu.princeton.cs.algs4.SequentialSearchST;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
-
-
 //package assignment5;
 //
 //import edu.princeton.cs.algs4.LinearProbingHashST;
 //import edu.princeton.cs.algs4.Queue;
 //
-//public class LinearHashing<Key, Value> {
+//public class QuadraticHashing<Key, Value> {
 //	
 ////	public long time;
 //	
@@ -33,7 +31,7 @@ import edu.princeton.cs.algs4.StdOut;
 //    /**
 //     * Initializes an empty symbol table.
 //     */
-//    public LinearHashing() {
+//    public QuadraticHashing() {
 //        this(INIT_CAPACITY);
 //    }
 //
@@ -42,14 +40,14 @@ import edu.princeton.cs.algs4.StdOut;
 //     *
 //     * @param capacity the initial capacity
 //     */
-//    public LinearHashing(int capacity) {
+//    public QuadraticHashing(int capacity) {
 //        m = capacity;
 //        n = 0;
 //        keys = (Key[])   new Object[m];
 //        vals = (Value[]) new Object[m];
 //    }
 //    
-//    public LinearHashing(int capacity, double loadfactor) {
+//    public QuadraticHashing(int capacity, double loadfactor) {
 //    	this.loadfactor = loadfactor;
 //        m = capacity;
 //        n = 0;
@@ -96,7 +94,7 @@ import edu.princeton.cs.algs4.StdOut;
 //
 //    // resizes the hash table to the given capacity by re-hashing all of the keys
 //    private void resize(int capacity) {
-//        LinearHashing<Key, Value> temp = new LinearHashing<Key, Value>(capacity);
+//        QuadraticHashing<Key, Value> temp = new QuadraticHashing<Key, Value>(capacity);
 //        for (int i = 0; i < m; i++) {
 //            if (keys[i] != null) {
 //                temp.put(keys[i], vals[i]);
@@ -136,7 +134,8 @@ import edu.princeton.cs.algs4.StdOut;
 //   //     System.out.println(loadfactor);
 //
 //        int i;
-//        for (i = hash(key); keys[i] != null; i = (i + 1) % m) {
+//        int j = 1;
+//        for (i = hash(key); keys[i] != null; i = (i + j*j) % m, j++) {
 ////            if (keys[i].equals(key)) {
 ////                vals[i] = val;
 ////                
@@ -291,7 +290,7 @@ import edu.princeton.cs.algs4.StdOut;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class LinearHashing<Key, Value> {
+public class QuadraticHashingWithoutResizing<Key, Value> {
     private static final int INIT_CAPACITY = 4;
 
     private int n;           // number of key-value pairs in the symbol table
@@ -304,7 +303,7 @@ public class LinearHashing<Key, Value> {
     /**
      * Initializes an empty symbol table.
      */
-    public LinearHashing() {
+    public QuadraticHashingWithoutResizing() {
         this(INIT_CAPACITY);
     }
 
@@ -313,19 +312,19 @@ public class LinearHashing<Key, Value> {
      *
      * @param capacity the initial capacity
      */
-    public LinearHashing(int capacity) {
+    public QuadraticHashingWithoutResizing(int capacity) {
         m = capacity;
         n = 0;
         keys = (Key[])   new Object[m];
         vals = (Value[]) new Object[m];
     }
     
-    public LinearHashing(int capacity, double loadfactor) {
-    	this.loadfactor = loadfactor;
+    public QuadraticHashingWithoutResizing(int capacity, double loadfactor) {
     	m = capacity;
     	n = 0;
     	keys = (Key[]) new Object[m];
     	vals = (Value[]) new Object[m];
+    	this.loadfactor = loadfactor;
     }
 
     /**
@@ -367,7 +366,7 @@ public class LinearHashing<Key, Value> {
 
     // resizes the hash table to the given capacity by re-hashing all of the keys
     private void resize(int capacity) {
-        LinearHashing<Key, Value> temp = new LinearHashing<Key, Value>(capacity);
+        QuadraticHashingWithoutResizing<Key, Value> temp = new QuadraticHashingWithoutResizing<Key, Value>(capacity);
         for (int i = 0; i < m; i++) {
             if (keys[i] != null) {
                 temp.put(keys[i], vals[i]);
@@ -397,10 +396,11 @@ public class LinearHashing<Key, Value> {
         }
 
         // double table size if 50% full
-        if (n >= m*loadfactor) resize(2*m);
+//        if (n >= m*loadfactor) resize(2*m);
 
         int i;
-        for (i = hash(key); keys[i] != null; i = (i + 1) % m) {
+        int j = 1;
+        for (i = hash(key); keys[i] != null; i = (i + j*j) % m) {
             if (keys[i].equals(key)) {
                 vals[i] = val;
                 return;
@@ -510,7 +510,7 @@ public class LinearHashing<Key, Value> {
      * @param args the command-line arguments
      */
     public static void main(String[] args) { 
-        LinearHashing<String, Integer> st = new LinearHashing<String, Integer>();
+        QuadraticHashingWithoutResizing<String, Integer> st = new QuadraticHashingWithoutResizing<String, Integer>();
         for (int i = 0; !StdIn.isEmpty(); i++) {
             String key = StdIn.readString();
             st.put(key, i);

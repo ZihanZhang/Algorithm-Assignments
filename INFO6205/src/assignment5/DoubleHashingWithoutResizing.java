@@ -1,23 +1,8 @@
-package assignment5;
-
-import edu.princeton.cs.algs4.BST;
-import edu.princeton.cs.algs4.BinarySearchST;
-import edu.princeton.cs.algs4.LinearProbingHashST;
-import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.algs4.RedBlackBST;
-import edu.princeton.cs.algs4.ST;
-import edu.princeton.cs.algs4.SeparateChainingHashST;
-import edu.princeton.cs.algs4.SequentialSearchST;
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
-
-
 //package assignment5;
 //
-//import edu.princeton.cs.algs4.LinearProbingHashST;
 //import edu.princeton.cs.algs4.Queue;
 //
-//public class LinearHashing<Key, Value> {
+//public class DoubleHashing<Key, Value> {
 //	
 ////	public long time;
 //	
@@ -33,7 +18,7 @@ import edu.princeton.cs.algs4.StdOut;
 //    /**
 //     * Initializes an empty symbol table.
 //     */
-//    public LinearHashing() {
+//    public DoubleHashing() {
 //        this(INIT_CAPACITY);
 //    }
 //
@@ -42,14 +27,14 @@ import edu.princeton.cs.algs4.StdOut;
 //     *
 //     * @param capacity the initial capacity
 //     */
-//    public LinearHashing(int capacity) {
+//    public DoubleHashing(int capacity) {
 //        m = capacity;
 //        n = 0;
 //        keys = (Key[])   new Object[m];
 //        vals = (Value[]) new Object[m];
 //    }
 //    
-//    public LinearHashing(int capacity, double loadfactor) {
+//    public DoubleHashing(int capacity, double loadfactor) {
 //    	this.loadfactor = loadfactor;
 //        m = capacity;
 //        n = 0;
@@ -92,11 +77,12 @@ import edu.princeton.cs.algs4.StdOut;
 //    // hash function for keys - returns value between 0 and M-1
 //    private int hash(Key key) {
 //        return (key.hashCode() & 0x7fffffff) % m;
+////    	return ((int)key) % m;
 //    }
 //
 //    // resizes the hash table to the given capacity by re-hashing all of the keys
 //    private void resize(int capacity) {
-//        LinearHashing<Key, Value> temp = new LinearHashing<Key, Value>(capacity);
+//        DoubleHashing<Key, Value> temp = new DoubleHashing<Key, Value>(capacity);
 //        for (int i = 0; i < m; i++) {
 //            if (keys[i] != null) {
 //                temp.put(keys[i], vals[i]);
@@ -136,16 +122,36 @@ import edu.princeton.cs.algs4.StdOut;
 //   //     System.out.println(loadfactor);
 //
 //        int i;
-//        for (i = hash(key); keys[i] != null; i = (i + 1) % m) {
-////            if (keys[i].equals(key)) {
-////                vals[i] = val;
-////                
-//////                long endtime = System.currentTimeMillis();
-//////                time = endtime - starttime;
-//////                System.out.print(time + " ");
-////                return;
-////            }
+//        int j;
+//        for (i = hash(key), j = 1;; j++) {
+//        	
+//        	if (j > 10000000) {
+//        		j = 1;
+//        	}
+//        	
+//        	int x = hash2((int)key);
+//        	
+//        	int y = x * j;
+//        	
+//        	i = (i + y) % m;
+//        	
+////        	System.out.print(j + " ");
+//        	
+//        	if (keys[i] == null) {
+//        		break;
+//        	}
 //        }
+////        for (i = hash(key), j = 1; keys[i] != null; i = (i + (j * hash2((int)key))) % m) {
+////        	j++;
+//////            if (keys[i].equals(key)) {
+//////                vals[i] = val;
+//////                
+////////                long endtime = System.currentTimeMillis();
+////////                time = endtime - starttime;
+////////                System.out.print(time + " ");
+//////                return;
+//////            }
+////        }
 //        keys[i] = key;
 //        vals[i] = val;
 //        n++;
@@ -153,6 +159,10 @@ import edu.princeton.cs.algs4.StdOut;
 ////        long endtime = System.currentTimeMillis();
 ////        time = endtime - starttime;
 ////        System.out.print(time + " ");
+//    }
+//    
+//    public int hash2(int key) {
+//    	return  97 - (key % 97);
 //    }
 //
 //    /**
@@ -259,7 +269,18 @@ import edu.princeton.cs.algs4.StdOut;
  *
  ******************************************************************************/
 
+package assignment5;
 
+import edu.princeton.cs.algs4.BST;
+import edu.princeton.cs.algs4.BinarySearchST;
+import edu.princeton.cs.algs4.LinearProbingHashST;
+import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.ST;
+import edu.princeton.cs.algs4.SeparateChainingHashST;
+import edu.princeton.cs.algs4.SequentialSearchST;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 
 /**
  *  The {@code LinearProbingHashST} class represents a symbol table of generic
@@ -291,7 +312,7 @@ import edu.princeton.cs.algs4.StdOut;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class LinearHashing<Key, Value> {
+public class DoubleHashingWithoutResizing<Key, Value> {
     private static final int INIT_CAPACITY = 4;
 
     private int n;           // number of key-value pairs in the symbol table
@@ -304,7 +325,7 @@ public class LinearHashing<Key, Value> {
     /**
      * Initializes an empty symbol table.
      */
-    public LinearHashing() {
+    public DoubleHashingWithoutResizing() {
         this(INIT_CAPACITY);
     }
 
@@ -313,14 +334,14 @@ public class LinearHashing<Key, Value> {
      *
      * @param capacity the initial capacity
      */
-    public LinearHashing(int capacity) {
+    public DoubleHashingWithoutResizing(int capacity) {
         m = capacity;
         n = 0;
         keys = (Key[])   new Object[m];
         vals = (Value[]) new Object[m];
     }
     
-    public LinearHashing(int capacity, double loadfactor) {
+    public DoubleHashingWithoutResizing(int capacity, double loadfactor) {
     	this.loadfactor = loadfactor;
     	m = capacity;
     	n = 0;
@@ -367,7 +388,7 @@ public class LinearHashing<Key, Value> {
 
     // resizes the hash table to the given capacity by re-hashing all of the keys
     private void resize(int capacity) {
-        LinearHashing<Key, Value> temp = new LinearHashing<Key, Value>(capacity);
+        DoubleHashingWithoutResizing<Key, Value> temp = new DoubleHashingWithoutResizing<Key, Value>(capacity);
         for (int i = 0; i < m; i++) {
             if (keys[i] != null) {
                 temp.put(keys[i], vals[i]);
@@ -397,10 +418,11 @@ public class LinearHashing<Key, Value> {
         }
 
         // double table size if 50% full
-        if (n >= m*loadfactor) resize(2*m);
+//        if (n >= m*loadfactor) resize(2*m);
 
         int i;
-        for (i = hash(key); keys[i] != null; i = (i + 1) % m) {
+        int j = 1;
+        for (i = hash(key); keys[i] != null; i = (i + j*hash2((int)key)) % m) {
             if (keys[i].equals(key)) {
                 vals[i] = val;
                 return;
@@ -409,6 +431,10 @@ public class LinearHashing<Key, Value> {
         keys[i] = key;
         vals[i] = val;
         n++;
+    }
+    
+    public int hash2(int key) {
+    	return 97 - (key % 97);
     }
 
     /**
@@ -510,7 +536,7 @@ public class LinearHashing<Key, Value> {
      * @param args the command-line arguments
      */
     public static void main(String[] args) { 
-        LinearHashing<String, Integer> st = new LinearHashing<String, Integer>();
+        DoubleHashingWithoutResizing<String, Integer> st = new DoubleHashingWithoutResizing<String, Integer>();
         for (int i = 0; !StdIn.isEmpty(); i++) {
             String key = StdIn.readString();
             st.put(key, i);
