@@ -1,1 +1,1 @@
-# INFO6205 Assignments
+INFO6205 Assignments
